@@ -17,7 +17,7 @@ const transporter = nodemailer.createTransport({
 function sendEmail(to, subject, text) {
     const mailOptions = {
         from: 'your-email@gmail.com',
-        to: to,
+        to: 'damien74@ethereal.email',
         subject: subject,
         text: text
     };
@@ -55,8 +55,19 @@ client.createTopics(topicsToCreate, (error, result) => {
     consumer.on('message', function (message) {
         const payload = JSON.parse(message.value);
         console.log(payload);
+
+        const to = 'damien74@ethereal.email';
+        const subject = "Kafka Notification";
+        const text = `User ID: ${payload.userId}\nAction: ${payload.action}`
+        
+        if(message.topic ==='password-change-topic'){
         sendEmail(to, subject, text);
-        // Implement email sending logic based on payload
+
+        }else if(message.topic === 'offer-topic'){
+            sendEmail(to, subject, text);
+
+        }
+      
     })
   
     consumer.on('error', function (err) {
